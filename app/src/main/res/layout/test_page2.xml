@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content11"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:clipChildren="false"
+    android:clipToPadding="false" >
+    <com.open.androidtvwidget.view.GridViewTV
+        android:id="@+id/gridView2"
+        android:nextFocusUp="@+id/title_bar2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginBottom="100dp"
+        android:clipChildren="false"
+        android:columnWidth="300dp"
+        android:gravity="center_vertical"
+        android:horizontalSpacing="12dp"
+        android:numColumns="auto_fit"
+        android:scrollbars="none"
+        android:verticalSpacing="20dp" />
+</RelativeLayout>

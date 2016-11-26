@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:clipChildren="false"
+    android:orientation="vertical" >
+
+    <com.open.androidtvwidget.view.SmoothHorizontalScrollView
+        android:id="@+id/test_hscro_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none" >
+
+        <com.open.androidtvwidget.view.FrameMainLayout
+            android:id="@+id/main_lay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="80dp" >
+
+            <com.open.androidtvwidget.view.GridViewTV
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="70dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginBottom="100dp"
+                android:clipChildren="false"
+                android:columnWidth="300dp"
+                android:gravity="center_vertical"
+                android:horizontalSpacing="12dp"
+                android:numColumns="auto_fit"
+                android:scrollbars="none"
+                android:verticalSpacing="20dp" />
+
+            <com.open.androidtvwidget.view.MainUpView
+                android:id="@+id/mainUpViewGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </com.open.androidtvwidget.view.FrameMainLayout>
+    </com.open.androidtvwidget.view.SmoothHorizontalScrollView>
+
+</LinearLayout>
