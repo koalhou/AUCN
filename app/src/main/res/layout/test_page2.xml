@@ -7,14 +7,45 @@
     android:background="@color/transparent"
     android:clipChildren="false"
     android:clipToPadding="false" >
+
+    <TextView
+        android:id="@+id/textView"
+        android:text="    今日更新列表："
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="bottom|center"
+        android:gravity="left"
+        android:textColor="#66CCFF"
+        android:textSize="20sp" />
+
+    <View  android:layout_height="4px"
+        android:layout_width="match_parent"
+        android:background="#66CCFF"
+        android:layout_marginTop="55dp" />
+
+    <com.open.androidtvwidget.view.SmoothHorizontalScrollView
+        android:id="@+id/test_hscro_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:fillViewport="true"
+        android:scrollbars="none" >
+
+    <com.open.androidtvwidget.view.FrameMainLayout
+        android:id="@+id/main_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="100dp" >
+
     <com.open.androidtvwidget.view.GridViewTV
         android:id="@+id/gridView2"
         android:nextFocusUp="@+id/title_bar2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginTop="70dp"
         android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="100dp"
         android:clipChildren="false"
         android:columnWidth="300dp"
@@ -23,4 +54,6 @@
         android:numColumns="auto_fit"
         android:scrollbars="none"
         android:verticalSpacing="20dp" />
+    </com.open.androidtvwidget.view.FrameMainLayout>
+    </com.open.androidtvwidget.view.SmoothHorizontalScrollView>
 </RelativeLayout>

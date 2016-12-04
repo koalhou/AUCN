@@ -1,16 +1,29 @@
 package com.aucn.tv.config;
 
 
-import com.aucn.tv.utils.AsyncTaskPlayListLoad;
-import com.aucn.tv.utils.AsyncTaskVideoLoad;
-import com.aucn.tv.utils.FileUtil;
-import com.aucn.tv.utils.HttpUtils;
-import com.aucn.tv.utils.JacksonUtils;
+import com.aucn.tv.utils.AsyncLivePeer;
+import com.aucn.tv.utils.AsyncTaskPlayListLoad1;
+import com.aucn.tv.utils.AsyncTaskVideoLoad1;
+import com.aucn.tv.utils.AsyncUpdateTodayDataLoad;
+import com.google.android.gms.common.Scopes;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.YouTubeRequestInitializer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mac on 2016/10/18.
@@ -28,56 +41,43 @@ public class Config {
     public static final String SHAI="7F:58:9D:6D:6C:48:D7:5E:97:9B:42:BD:53:39:60:75:5C:7B:2A:D4";
     public static final String SINGLE_CODE = "4/w0flzGXxAHxzIxDmOkKs4MxuMmPfp6W40kaua8wXwCo#";
     public static String defaultImgUrl = "https://i.ytimg.com/vi/1AVTGtZn28Q/mqdefault_live.jpg";
-
-//    public static Map<String, List<String>> allData = new HashMap<String,List<String>>();
-
-//    public static List<String> UTD_IDS = new ArrayList<String>();
-//    public static List<String> UTD_IMGS = new ArrayList<String>();
-//    public static List<String> UTD_TITLES = new ArrayList<String>();
-//    public static List<String> PL_IDS = new ArrayList<String>();
-//    public static List<String> PL_TITLES = new ArrayList<String>();
-//    public static List<String> PL_IMGS = new ArrayList<String>();
+    public static final String LIVE_COMMING_URL = "http://www.aucn.tv/comingup";
+    public static final String MEMBERSHIP = "http://www.aucn.tv/membership";
 
     public static List<DisplayBase> updateToday = new ArrayList<DisplayBase>();
     public static List<DisplayBase> playLists = new ArrayList<DisplayBase>();
 
+    public static boolean isNetworkOK = false;
     public static Map<String, List<DisplayBase>> PL_DETAILS = new HashMap<String,List<DisplayBase>>();
 
     public static String liveId = "";
 
+    public static String GOOGLE_TEST_IP = "8.8.8.8";
+
     public static boolean initFinished = false;
     public static boolean updateTodayFinished = false;
+    public static String SCOPE_SNIPPET = "snippet";
+    public static long MAX_RESULTS = 50;
 
+    public static GoogleAccountCredential credential = null;
 //    public static Map<String,Bitmap> bitMapMaps = new HashMap<String,Bitmap>();
 
-    public static String getLiveVideo (){
-        if(liveId == null || "".equals(liveId)){
-            String vid = "";
-            try {
-                HttpUtils hu = new HttpUtils();
-                String updateTodayQuery = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=date&channelId=" + Config.YOUTUBE_CHANNEL_ID + "&key=" + Config.YOUTUBE_API_KEY;
-                String updateToday = hu.get(updateTodayQuery, "UTF-8");
-                Map<String, Object> updateTodayOri = (Map<String, Object>) JacksonUtils.jsonToMap(updateToday);
-                List<Object> updateTodayitems = (List<Object>) updateTodayOri.get("items");
-                for (Object o : updateTodayitems) {
-                    Map<String, Object> vedioDetails = (Map<String, Object>) o;
-                    Map<String, String> vvid = (Map<String, String>) vedioDetails.get("id");
-                    Map<String, Object> snippet = (Map<String, Object>) vedioDetails.get("snippet");
-                    String liveFlag = (String) snippet.get("liveBroadcastContent");
-                    if("live".equals(liveFlag)){
-                        vid = vvid.get("videoId");
-                    }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
+    public static final String APP_NAME = "AUCNAndroid";
+    public static final String[] SCOPES = {Scopes.PROFILE, com.google.api.services.youtube.YouTubeScopes.YOUTUBE};
+    private static final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+    private static final JsonFactory jsonFactory = new GsonFactory();
+
+    public static YouTube youtube(){
+        return new YouTube.Builder(transport, jsonFactory, new HttpRequestInitializer() {
+            @Override
+            public void initialize(HttpRequest httpRequest) throws IOException {
+
             }
-            return vid;
-        }
-        return "";
+        }).setYouTubeRequestInitializer(new YouTubeRequestInitializer(Config.YOUTUBE_API_KEY)).setApplicationName("澳洲中文电视台").build();
     }
 
     public static void initPlayListDatas() {
-        AsyncTaskPlayListLoad atdl = new AsyncTaskPlayListLoad();
+        AsyncTaskPlayListLoad1 atdl = new AsyncTaskPlayListLoad1();
         atdl.execute();
     }
 
@@ -86,15 +86,30 @@ public class Config {
     }
 
     public static void initPlayListDetails() {
-        String cachedPls = FileUtil.getCachedPls();
-        if("".equals(cachedPls) || cachedPls == null){
-            return;
-        }
-        String pl[] = cachedPls.split("&&");
-//        for(DisplayBase db : playLists){
-        for(String plid : pl){
-            AsyncTaskVideoLoad v = new AsyncTaskVideoLoad(plid);
+        for(DisplayBase db : playLists) {
+            AsyncTaskVideoLoad1 v = new AsyncTaskVideoLoad1(db.entityId);
             v.execute();
         }
     }
+
+    public static void startLiveSchedule() {
+        AsyncLivePeer alp = new AsyncLivePeer();
+        alp.execute();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                AsyncLivePeer alp = new AsyncLivePeer();
+                alp.execute();
+            }
+        };
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+        service.scheduleAtFixedRate(runnable, 20, 20, TimeUnit.SECONDS);
+    }
+
+    public static void initUpdateToday() {
+        AsyncUpdateTodayDataLoad aud = new AsyncUpdateTodayDataLoad();
+        aud.execute();
+    }
+
+
 }

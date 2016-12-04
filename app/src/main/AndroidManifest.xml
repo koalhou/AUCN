@@ -26,9 +26,9 @@
        <activity android:name="com.aucn.tv.com.aucn.tv.DemoKeyBoardActivity" />
        <activity android:name="com.aucn.tv.com.aucn.tv.DemoViewPagerActivity" />
        <activity android:name="com.aucn.tv.com.aucn.tv.DemoMenuActivity"/>
-        <activity android:name="com.aucn.tv.com.aucn.tv.YouTubePlayerActivity"/>
        <activity android:name="com.aucn.tv.com.aucn.tv.DemoRecyclerviewActivity"/>-->
         <activity android:name="com.aucn.tv.PlayListGridViewActivity" />
+        <activity android:name="com.aucn.tv.YouTubePlayerActivity"/>
         <activity android:name="com.aucn.tv.SplashActivity" />
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
@@ -39,5 +39,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 </manifest>

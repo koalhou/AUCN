@@ -68,6 +68,7 @@ public class PlayListGridViewActivity extends Activity {
     private GridViewTV gridView;
     private GridViewAdapter mAdapter;
     private int mSavePos = -1;
+    private String playListTitle = "您当前观看的频道是：";
 //    private int mCount = 50;
 
 //    public static final String PlayList_ID = "AIzaSyAP1H0PtjMyfu1FZZs10-TEklKgesvEpQw";
@@ -93,6 +94,8 @@ public class PlayListGridViewActivity extends Activity {
             PlayListGridViewActivity.this.finish();
             return;
         }
+        TextView tv = (TextView)findViewById(R.id.list_title);
+        tv.setText(playListTitle);
         gridView = (GridViewTV) findViewById(R.id.gridView);
         mainUpView1 = (MainUpView) findViewById(R.id.mainUpViewGrid);
         // 建议使用 NoDraw.
@@ -150,7 +153,11 @@ public class PlayListGridViewActivity extends Activity {
     private boolean initPlaylist() {
         Intent i = getIntent();
         String plid = (String)i.getExtras().get("plid");
+//        Map map = Config.PL_DETAILS;
+//        System.out.println(map);
         playList = Config.getPlayListById(plid);
+        int position = (int)i.getExtras().get("position");
+        playListTitle += Config.playLists.get(position).entityTytle;
         if(playList == null || playList.size() == 0){
             return false;
         }

@@ -1,11 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        AUCN {
+            keyAlias 'houjunhu'
+            keyPassword 'houjunhu'
+            storeFile file('D:/key_houjunhu')
+            storePassword 'houjunhu'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '24.0.2'
-
     defaultConfig {
-        applicationId "com.open.demo"
+        applicationId "com.aucn.tv"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
@@ -15,6 +22,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.AUCN
         }
     }
     packagingOptions {
@@ -31,9 +41,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile project(':androidtvwidget')
+    compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-    compile files('libs/httpcore-4.4.1.jar')
-    compile files('libs/jackson-module-jaxb-annotations-2.1.4.jar')
-    compile files('libs/commons-lang3-3.4.jar')
-    compile files('libs/gson-2.2.4.jar')
+    compile 'com.google.http-client:google-http-client-android:+'
+    compile 'com.google.api-client:google-api-client-android:+'
+    compile 'com.google.api-client:google-api-client-gson:+'
+    compile 'com.google.code.gson:gson:2.2.4'
 }

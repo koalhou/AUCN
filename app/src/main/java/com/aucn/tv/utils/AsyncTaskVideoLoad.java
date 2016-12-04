@@ -4,16 +4,15 @@ import android.os.AsyncTask;
 
 import com.aucn.tv.config.Config;
 import com.aucn.tv.config.DisplayBase;
+import com.google.api.services.youtube.model.PlaylistItem;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.google.api.services.youtube.model.PlaylistItemSnippet;
+import com.google.api.services.youtube.model.Thumbnail;
+import com.google.api.services.youtube.model.ThumbnailDetails;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static com.aucn.tv.config.Config.defaultImgUrl;
 
 
 /**
@@ -30,58 +29,45 @@ public class AsyncTaskVideoLoad extends AsyncTask <String, Integer,List<DisplayB
 
     @Override
     public List<DisplayBase> doInBackground(String... params) {
-        HttpUtils hu = HttpUtils.getInstance();
-        String query = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId="+plId+"&maxResults=50&key=" + Config.YOUTUBE_API_KEY;
-        List<DisplayBase> thisplvs = new ArrayList<DisplayBase>();
         try {
-            String vedioStr = hu.get(query, "UTF-8");
-            Map<String, Object> videosOri = (Map<String,Object>)JacksonUtils.jsonToMapRuntimeException(vedioStr);
-            List<Object> videos = (List<Object>) videosOri.get("items");
-            for(Object o : videos){
-                Map<String, Object> vedioDetails = (Map<String,Object>)o;
-                Map<String, Object> snippet = (Map<String,Object>)vedioDetails.get("snippet");
-                Map<String,String> vvid = (Map<String,String>) snippet.get("resourceId");
-                String vid = vvid.get("videoId");
-                String title = (String)snippet.get("title");
-                if(title.toLowerCase().contains("delete")){
-                    continue;
-                }
-                Map<String,Object> thumbnails = (Map<String,Object>)snippet.get("thumbnails");
-                String tDimg = "";
-                if(thumbnails == null){
-                    tDimg = defaultImgUrl;
-                }else{
-                    Map<String,String> medium = (Map<String,String>)thumbnails.get("medium");
-                    if(medium == null){
-                        Map<String, Object> aDefault = (Map<String, Object>)thumbnails.get("default");
-                        tDimg = (String)aDefault.get("url");
-                    }else{
-                        tDimg = (String)medium.get("url");
-                    }
-                    if(tDimg == null || "".equals(tDimg)){
-                        tDimg = defaultImgUrl;
-                    }
-                    tDimg = (String)medium.get("url");
-                }
-//                String[] utd = {vid,title,tDimg};
-//                String[] utd = {vid};
+            List<DisplayBase> dbs = new ArrayList<>();
+            PlaylistItemListResponse plil = Config.youtube().playlistItems().list(Config.SCOPE_SNIPPET).setPlaylistId(plId).setMaxResults(Config.MAX_RESULTS).execute();
+            for(PlaylistItem pl :plil.getItems()){
                 DisplayBase db = new DisplayBase();
-                db.entityType = "video";
-                db.entityId = vid;
-                db.entityTytle = title;
-                db.entityImg = tDimg;
-                thisplvs.add(db);
+                db.entityType = "pl";
+                db.entityId = pl.getSnippet().getResourceId().getVideoId();
+                db.entityTytle = pl.getSnippet().getTitle();
+                String img = Config.defaultImgUrl;
+                if(pl != null){
+                    PlaylistItemSnippet ps = pl.getSnippet();
+                    if(ps != null){
+                        ThumbnailDetails td = ps.getThumbnails();
+                        if(td != null){
+                            Thumbnail tn = td.getMedium();
+                            if(tn != null){
+                                String url = tn.getUrl();
+                                if(url!=null){
+                                    img = url;
+                                }
+                            }else{
+                                Thumbnail tn1 = td.getDefault();
+                                String url1 = tn1.getUrl();
+                                if(url1 != null){
+                                    img = url1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                db.entityImg = img;
+                dbs.add(db);
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
+            return dbs;
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
+            return null;
         }
-        return thisplvs;
     }
 
     @Override

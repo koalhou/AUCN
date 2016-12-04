@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aucn.tv.adapter.OpenTabTitleAdapter;
 import com.aucn.tv.config.Config;
@@ -36,10 +37,12 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.open.androidtvwidget.bridge.EffectNoDrawBridge;
 import com.open.androidtvwidget.bridge.OpenEffectBridge;
+import com.open.androidtvwidget.utils.NetWorkUtils;
 import com.open.androidtvwidget.utils.OPENLOG;
 import com.open.androidtvwidget.view.GridViewTV;
 import com.open.androidtvwidget.view.MainUpView;
 import com.open.androidtvwidget.view.OpenTabHost;
+import com.open.androidtvwidget.view.ReflectItemView;
 import com.open.androidtvwidget.view.TextViewWithTTF;
 
 import java.util.ArrayList;
@@ -83,11 +86,19 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 //        Intent i = new Intent(getApplicationContext(), YouTubePlayerActivity.class);
 //        i.putExtra("key","O1YzPhOct5s");
 //        startActivity(i);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demo_viewpager_activity);
-//        Config.initPlayListDatas();
-//        OPENLOG.initTag("hailongqiu", true); // 测试LOG输出.
-        // 初始化标题栏.
+
+        if(!NetWorkUtils.isNetWorkdetect(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), "未检测到网络连接，请检测网络后重试。", Toast.LENGTH_SHORT).show();
+            MainActivity.this.finish();
+        }
+//
+//        if(!NetWorkUtils.isIpReachable(Config.GOOGLE_TEST_IP)){
+//            Toast.makeText(getApplicationContext(), "GOOGLE服务不可用，请稍后重试。", Toast.LENGTH_SHORT).show();
+//            MainActivity.this.finish();
+//        }
 
         final Intent intent = new Intent();
         intent.setClass(MainActivity.this,SplashActivity.class);
@@ -235,26 +246,49 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                 return true;
             }
         });
-        webView1.loadUrl("http://www.aucn.tv/advertisements/");
+        webView1.loadUrl(Config.MEMBERSHIP);
     }
 
     private void initView1() {
-//        WebView webView1 = (WebView) view1.findViewById(R.id.webViewLive);
-//        webView1.getSettings().setJavaScriptEnabled(true);
-//        webView1.setWebViewClient(new WebViewClient(){
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                view.loadUrl(url);
-//                return true;
-//            }
-//        });
-//        webView1.loadUrl("https://youtu.be/O1YzPhOct5s");
-//        String live = Config.getLiveVideo();
-//        if(!"".equals(live) && live != null){
-//            Intent i = new Intent(getApplicationContext(), YouTubePlayerActivity.class);
-//            i.putExtra("key",live);
-//            startActivity(i);
-//        }
+
+        final String live = Config.liveId;
+        if(live== null || "".equals(live)){
+            ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
+            WebView webView1 = (WebView) view1.findViewById(R.id.webViewLive);
+            iv.setVisibility(View.GONE);
+            webView1.setVisibility(View.VISIBLE);
+            webView1.getSettings().setJavaScriptEnabled(true);
+            webView1.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
+            webView1.loadUrl(Config.LIVE_COMMING_URL);
+        }else{
+            ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
+            WebView webView1 = (WebView) view1.findViewById(R.id.webViewLive);
+            iv.setVisibility(View.VISIBLE);
+            webView1.setVisibility(View.GONE);
+            iv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean hasFocus) {
+                    if (view != null) {
+                        mainUpView1.setFocusView(view, mOldView, 1.1f);
+                    }
+                    mOldView = view;
+                }
+            });
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getApplicationContext(), YouTubePlayerActivity.class);
+                    i.putExtra("key",live);
+                    startActivity(i);
+                }
+            });
+        }
     }
 
     private void initView3() {
@@ -291,6 +325,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 //                Toast.makeText(getApplicationContext(), "GridView Item " + position + " pos:" + mSavePos, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), PlayListGridViewActivity.class);
                 i.putExtra("plid",Config.playLists.get(position).entityId);
+                i.putExtra("position",position);
                 startActivity(i);
             }
         });

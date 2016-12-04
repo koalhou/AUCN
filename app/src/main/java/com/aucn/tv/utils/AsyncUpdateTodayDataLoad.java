@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.aucn.tv.config.Config;
 import com.aucn.tv.config.DisplayBase;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +30,8 @@ public class AsyncUpdateTodayDataLoad extends AsyncTask <String, Integer, String
         Map<String,Object> updateTodayOri = null;
         try {
             updateToday = hu.get(updateTodayQuery,"UTF-8");
-            updateTodayOri = (Map<String,Object>)JacksonUtils.jsonToMap(updateToday);
+            Gson gson = new Gson();
+            updateTodayOri = gson.fromJson(updateToday,Map.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

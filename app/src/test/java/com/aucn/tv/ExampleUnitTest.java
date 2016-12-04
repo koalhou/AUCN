@@ -1,4 +1,4 @@
-package com.open.demo;
+package com.aucn.tv;
 
 import org.junit.Test;
 

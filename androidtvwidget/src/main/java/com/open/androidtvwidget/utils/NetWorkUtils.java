@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.net.InetAddress;
+
 /**
  * 一些网络常用的接口.<br>
  * 记得要添加权限哈.<br>
@@ -26,6 +28,18 @@ public class NetWorkUtils {
 		return true;
 	}
 
+	public static boolean isIpReachable(String ip){
+		try{
+			InetAddress addr = InetAddress.getByName(ip);
+			if (addr.isReachable(3000)){
+				return true;
+			}
+			return false;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 	/**
 	 * 判断有线网络.
 	 */
