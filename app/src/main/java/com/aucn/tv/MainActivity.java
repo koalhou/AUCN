@@ -578,7 +578,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         private void LoadImage(ImageView img, String path)
         {
             //异步加载图片资源
-            AsyncTaskImageLoad async=new AsyncTaskImageLoad(img);
+            AsyncTaskImageLoad async = new AsyncTaskImageLoad(img);
             //执行异步加载，并把图片的路径传送过去
             async.execute(path);
 

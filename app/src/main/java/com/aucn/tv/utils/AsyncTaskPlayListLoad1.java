@@ -6,6 +6,7 @@ import com.aucn.tv.config.Config;
 import com.aucn.tv.config.DisplayBase;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -18,22 +19,42 @@ import static com.aucn.tv.config.Config.defaultImgUrl;
 
 public class AsyncTaskPlayListLoad1 extends AsyncTask <String, Integer, String>{
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
     @Override
     public String doInBackground(String... params) {
-        HttpUtils hu = HttpUtils.getInstance();
-        String query = "https://www.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&channelId=" + Config.YOUTUBE_CHANNEL_ID + "&key=" + Config.YOUTUBE_API_KEY;
+//        System.out.println("STEP 1 -----------" + sdf.format(new Date()));
+        HttpUtils hu = HttpUtils.getInstance(this.getClass().getName());
+        String query = "https://www.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=" + Config.MAX_RESULTS + "&channelId=" + Config.YOUTUBE_CHANNEL_ID + "&key=" + Config.YOUTUBE_API_KEY;
         String playListStr = "";
         Map<String,Object> oriPlayLists = null;
+        Gson gson=new Gson();
         try {
+
+//            System.out.println("STEP 2 -----------" + sdf.format(new Date()));
             playListStr = hu.get(query, "UTF-8");
-            Gson gson=new Gson();
             oriPlayLists = gson.fromJson(playListStr,Map.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String cacheTemp = "";
-        List<Object> items = (List<Object>) oriPlayLists.get("items");
 
+//        System.out.println("STEP 3 -----------" + sdf.format(new Date()));
+        List<Object> items = (List<Object>) oriPlayLists.get("items");
+        Object nextPageToken = oriPlayLists.get("nextPageToken");
+        while (nextPageToken != null){
+            String queryNextPage = query + "&pageToken=" + nextPageToken;
+            Map<String,Object> oriPlayListsNext = null;
+            try {
+                playListStr = hu.get(queryNextPage, "UTF-8");
+                oriPlayListsNext = gson.fromJson(playListStr,Map.class);
+                nextPageToken = oriPlayListsNext.get("nextPageToken");
+                List<Object> itemsNext = (List<Object>) oriPlayListsNext.get("items");
+                items.addAll(itemsNext);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+//        System.out.println("STEP 4 -----------" + sdf.format(new Date()));
         for(Object object : items){
             try{
                 Map<String, Object> list = (Map<String, Object>)object;
@@ -63,7 +84,6 @@ public class AsyncTaskPlayListLoad1 extends AsyncTask <String, Integer, String>{
                 db.entityTytle = title;
                 db.entityImg = plImg;
                 Config.playLists.add(db);
-                cacheTemp += plid +"&&";
 //                if(!PL_IDS.contains(plid))
 //                    PL_IDS.add(plid);
 //                if(!PL_TITLES.contains(title))
@@ -75,8 +95,10 @@ public class AsyncTaskPlayListLoad1 extends AsyncTask <String, Integer, String>{
                 continue;
             }
         }
+
+//        System.out.println("STEP 5 -----------" + sdf.format(new Date()));
         Config.initFinished = true;
-        return cacheTemp.substring(0, cacheTemp.length() - 1);
+        return "OK";
 
 
     }

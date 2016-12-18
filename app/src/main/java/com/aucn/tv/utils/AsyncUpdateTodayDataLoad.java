@@ -24,7 +24,7 @@ public class AsyncUpdateTodayDataLoad extends AsyncTask <String, Integer, String
 
     @Override
     public String doInBackground(String... params) {
-        HttpUtils hu = HttpUtils.getInstance();
+        HttpUtils hu = HttpUtils.getInstance(this.getClass().getName());
         String updateTodayQuery = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=date&channelId=" + Config.YOUTUBE_CHANNEL_ID + "&key=" + Config.YOUTUBE_API_KEY;
         String updateToday = "";
         Map<String,Object> updateTodayOri = null;

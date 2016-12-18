@@ -2,7 +2,7 @@ package com.aucn.tv.config;
 
 
 import com.aucn.tv.utils.AsyncLivePeer;
-import com.aucn.tv.utils.AsyncTaskPlayListLoad1;
+import com.aucn.tv.utils.AsyncTaskPlayListLoad2;
 import com.aucn.tv.utils.AsyncTaskVideoLoad1;
 import com.aucn.tv.utils.AsyncUpdateTodayDataLoad;
 import com.google.android.gms.common.Scopes;
@@ -77,7 +77,7 @@ public class Config {
     }
 
     public static void initPlayListDatas() {
-        AsyncTaskPlayListLoad1 atdl = new AsyncTaskPlayListLoad1();
+        AsyncTaskPlayListLoad2 atdl = new AsyncTaskPlayListLoad2();
         atdl.execute();
     }
 
@@ -106,10 +106,24 @@ public class Config {
         service.scheduleAtFixedRate(runnable, 20, 20, TimeUnit.SECONDS);
     }
 
-    public static void initUpdateToday() {
+    public static void initUpdateTodaySchedule() {
         AsyncUpdateTodayDataLoad aud = new AsyncUpdateTodayDataLoad();
         aud.execute();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                AsyncUpdateTodayDataLoad aud = new AsyncUpdateTodayDataLoad();
+                aud.execute();
+            }
+        };
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+        service.scheduleAtFixedRate(runnable, 30, 200, TimeUnit.SECONDS);
     }
 
 
+    public static void initAll() {
+        initPlayListDatas();
+        startLiveSchedule();
+        initUpdateTodaySchedule();
+    }
 }

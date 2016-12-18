@@ -13,8 +13,7 @@ public class AsyncTaskImageLoad extends AsyncTask<String, Integer, Bitmap> {
 
     private ImageView Image=null;
 
-    public AsyncTaskImageLoad(ImageView img)
-    {
+    public AsyncTaskImageLoad(ImageView img){
         Image=img;
     }
     //运行在子线程中
@@ -23,7 +22,8 @@ public class AsyncTaskImageLoad extends AsyncTask<String, Integer, Bitmap> {
         Bitmap bm = null;
         try {
             //先从本地缓存获取，如果未找到缓存，则从web端获取
-            bm = PicUtil.getCachedPic(params[0]);
+            bm = FileUtil.getCachedFile(params[0]);
+            System.out.println("---=============================="+bm);
             if(bm == null){
                 bm = PicUtil.getbitmapAndwrite(params[0]);
             }
@@ -34,8 +34,7 @@ public class AsyncTaskImageLoad extends AsyncTask<String, Integer, Bitmap> {
     }
 
     @Override
-    protected void onPostExecute(Bitmap result)
-    {
+    protected void onPostExecute(Bitmap result){
         if(Image!=null && result!=null) {
             Image.setImageBitmap(result);
         }

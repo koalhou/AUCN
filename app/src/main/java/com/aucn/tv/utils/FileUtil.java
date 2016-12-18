@@ -4,12 +4,15 @@ package com.aucn.tv.utils;
  * Created by mac on 2016/10/29.
  */
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -49,15 +52,17 @@ public class FileUtil {
         return cacheFile;
     }
 
-    public static File getCachedFile(String imageUri){
-        File cacheFile = null;
+    public static Bitmap getCachedFile(String imageUri){
+        Bitmap cacheFile = null;
         try {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 String fileName = getFileName(imageUri);
                 File dir = new File(sdCardDir.getCanonicalPath() + "/" + CACHE_DIR );
-                cacheFile = new File(dir, fileName);
-                Log.i(TAG, "exists:" + cacheFile.exists() + ",dir:" + dir + ",file:" + fileName);
+                File file = new File(dir, fileName);
+                FileInputStream fis = new FileInputStream(file);
+                cacheFile = BitmapFactory.decodeStream(fis);
+//                Log.i(TAG, "exists:" + cacheFile.exists() + ",dir:" + dir + ",file:" + fileName);
             }
         } catch (IOException e) {
             e.printStackTrace();

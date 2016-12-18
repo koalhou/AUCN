@@ -319,16 +319,20 @@ public class PicUtil {
         return bitmapWithReflection;
     }
 
-    public static Bitmap getCachedPic(String imageUri) throws Exception{
-        File cacheFile = FileUtil.getCachedFile(imageUri);
-        Bitmap bm = null;
-//        System.out.println(cacheFile);
-//        System.out.println(cacheFile.exists());
-//        System.out.println(!cacheFile.exists());
-        if(cacheFile.exists()){
-//            System.out.println(cacheFile.exists());
-            bm = BitmapFactory.decodeFile(cacheFile.getCanonicalPath());
-        }
-        return bm;
-    }
+//    public static Bitmap getCachedPic(String imageUri) throws Exception{
+//        Bitmap cacheFile = FileUtil.getCachedFile(imageUri);
+//        Bitmap bm = null;
+////        System.out.println(cacheFile);
+////        System.out.println(cacheFile.exists());
+////        System.out.println(!cacheFile.exists());
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//
+//            options.inSampleSize = 2;
+//
+//            bm = BitmapFactory.decodeFile(cacheFile.getCanonicalPath(), options);
+////            System.out.println(cacheFile.exists());
+////            bm = BitmapFactory.decodeFile(cacheFile.getCanonicalPath());
+//        }
+//        return bm;
+//    }
 }

@@ -139,6 +139,7 @@ public class PlayListGridViewActivity extends Activity {
 //                Toast.makeText(getApplicationContext(), "GridView Item " + position + " pos:" + mSavePos, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), YouTubePlayerActivity.class);
                 i.putExtra("key",playList.get(position).entityId);
+                i.putExtra("name",playList.get(position).entityTytle);
                 startActivity(i);
             }
         });
@@ -275,8 +276,7 @@ public class PlayListGridViewActivity extends Activity {
             return convertView;
         }
 
-        private void LoadImage(ImageView img, String path)
-        {
+        private void LoadImage(ImageView img, String path){
             //异步加载图片资源
             AsyncTaskImageLoad async=new AsyncTaskImageLoad(img);
             //执行异步加载，并把图片的路径传送过去

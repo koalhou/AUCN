@@ -17,7 +17,7 @@ public class AsyncLivePeer extends AsyncTask <String, Integer,String>{
     @Override
     public String doInBackground(String... params) {
         try {
-            HttpUtils hu = new HttpUtils();
+            HttpUtils hu = new HttpUtils(this.getClass().getName());
             String liveQuery = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=date&channelId=" + Config.YOUTUBE_CHANNEL_ID + "&key=" + Config.YOUTUBE_API_KEY;
             String updateToday = hu.get(liveQuery, "UTF-8");
             Gson gson = new Gson();

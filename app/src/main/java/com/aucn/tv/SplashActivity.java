@@ -17,24 +17,22 @@ public class SplashActivity extends Activity{
     protected void onCreate(Bundle saved){
         super.onCreate(saved);
         setContentView(R.layout.splash);
+        Config.initAll();
         new Handler().postDelayed(new Runnable(){
             public void run(){
-                try{
-                    Config.startLiveSchedule();
-                    Config.initPlayListDatas();
-                    Config.initUpdateToday();
-                    while (!Config.initFinished){
-                        Thread.sleep(1000);
-                        System.out.println("waiting for playList init finish...");
-                    }
-                    Config.initPlayListDetails();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+//                try{
+//                    while (!Config.initFinished){
+//                        Thread.sleep(1000);
+//                        System.out.println("waiting for playList init finish...");
+//                    }
+////                    Config.initPlayListDetails();
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
                 SplashActivity.this.finish();
                 Toast.makeText(getApplicationContext(), "澳洲中文电视台", Toast.LENGTH_SHORT).show();
             }
-        }, 5000);
+        }, 8000);
     }
 
 }

@@ -50,6 +50,7 @@ public class YouTubePlayerActivity extends YouTubeBaseActivity implements YouTub
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
         Intent i = getIntent();
         String url1 = (String)i.getExtras().get("key");
+        String name = (String)i.getExtras().get("name");
         if (!wasRestored) {
 //            player.cueVideo("fhWaJi1Hsfo"); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
 //            player.cueVideo(url1);
@@ -57,6 +58,7 @@ public class YouTubePlayerActivity extends YouTubeBaseActivity implements YouTub
 //            player.cueVideo(url1,0);
             try {
                 player.loadVideo(url1);
+                Toast.makeText(getApplicationContext(),"当前播放节目为：" + name, Toast.LENGTH_LONG).show();
             }catch (Exception e){
                 YouTubePlayerActivity.this.finish();
                 return;

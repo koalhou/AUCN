@@ -31,14 +31,28 @@ public class AsyncTaskVideoLoad1 extends AsyncTask <String, Integer,List<Display
 
     @Override
     public List<DisplayBase> doInBackground(String... params) {
-        HttpUtils hu = HttpUtils.getInstance();
-        String query = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId="+plId+"&maxResults=50&key=" + Config.YOUTUBE_API_KEY;
+        HttpUtils hu = HttpUtils.getInstance(this.getClass().getName());
+        String query = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + plId + "&order=date" + "&maxResults=" + Config.MAX_RESULTS + "&key=" + Config.YOUTUBE_API_KEY ;
         List<DisplayBase> thisplvs = new ArrayList<DisplayBase>();
         try {
             String vedioStr = hu.get(query, "UTF-8");
             Gson gson = new Gson();
             Map<String, Object> videosOri = gson.fromJson(vedioStr,Map.class);
             List<Object> videos = (List<Object>) videosOri.get("items");
+            Object nextPageToken = videosOri.get("nextPageToken");
+            while (nextPageToken != null){
+                String queryNextPage = query + "&pageToken=" + nextPageToken;
+                Map<String,Object> videosOriNext = null;
+                try {
+                    vedioStr = hu.get(queryNextPage, "UTF-8");
+                    videosOriNext = gson.fromJson(vedioStr,Map.class);
+                    nextPageToken = videosOriNext.get("nextPageToken");
+                    List<Object> itemsNext = (List<Object>) videosOriNext.get("items");
+                    videos.addAll(itemsNext);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             for(Object o : videos){
                 Map<String, Object> vedioDetails = (Map<String,Object>)o;
                 Map<String, Object> snippet = (Map<String,Object>)vedioDetails.get("snippet");
