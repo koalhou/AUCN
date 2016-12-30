@@ -42,7 +42,7 @@ public class FileUtil {
                 if(!cacheFile.exists()){
                     cacheFile.createNewFile();
                 }
-                Log.i(TAG, "exists:" + cacheFile.exists() + ",dir:" + dir + ",file:" + fileName);
+//                Log.i(TAG, "exists:" + cacheFile.exists() + ",dir:" + dir + ",file:" + fileName);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,9 +60,11 @@ public class FileUtil {
                 String fileName = getFileName(imageUri);
                 File dir = new File(sdCardDir.getCanonicalPath() + "/" + CACHE_DIR );
                 File file = new File(dir, fileName);
-                FileInputStream fis = new FileInputStream(file);
-                cacheFile = BitmapFactory.decodeStream(fis);
-//                Log.i(TAG, "exists:" + cacheFile.exists() + ",dir:" + dir + ",file:" + fileName);
+                if(file.exists()){
+                    FileInputStream fis = new FileInputStream(file);
+                    cacheFile = BitmapFactory.decodeStream(fis);
+                }
+//                Log.i(TAG, "exists:" + file.exists() + ",dir:" + dir + ",file:" + fileName);
             }
         } catch (IOException e) {
             e.printStackTrace();

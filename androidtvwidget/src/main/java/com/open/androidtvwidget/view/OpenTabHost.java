@@ -1,11 +1,5 @@
 package com.open.androidtvwidget.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.open.androidtvwidget.R;
-import com.open.androidtvwidget.adapter.BaseTabTitleAdapter;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -13,6 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabWidget;
+
+import com.open.androidtvwidget.R;
+import com.open.androidtvwidget.adapter.BaseTabTitleAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 标题栏控<p>
@@ -99,6 +99,7 @@ public class OpenTabHost extends TabHost {
 	}
 
 	public void setAdapter(BaseTabTitleAdapter adapter) {
+		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		mCacheView.clear();
 		clearAllTabs();
 		this.mAdapter = adapter;
@@ -106,6 +107,7 @@ public class OpenTabHost extends TabHost {
 			int count = this.mAdapter.getCount();
 			if (count > 0) {
 				for (int i = 0; i < count; i++) {
+					System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 					View titleView = this.mAdapter.getView(i, null, this);
 					mCacheView.add(titleView);
 					TabSpec tabSpec = this.newTabSpec(i + "").setIndicator(titleView);

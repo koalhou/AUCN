@@ -11,8 +11,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -58,6 +56,11 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
     private View view1, view2, view3,view4;
     private GridViewTV GV2;
     private GridViewTV GV3;
+
+    private static boolean view2Inited = false;
+    private static boolean view3Inited = false;
+
+    private List<String> binded = new ArrayList<>();
 
     private GridViewAdapter mAdapter2;
     private GridViewAdapter mAdapter3;
@@ -200,6 +203,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE: // viewpager 滚动结束.
                         mainUpView1.setFocusView(mNewFocus, mOldView, 1.1f);
@@ -301,6 +305,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         GV3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 /**
                  * 这里注意要加判断是否为NULL.
                  * 因为在重新加载数据以后会出问题.
@@ -341,6 +346,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         GV2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("ON Item Selectd called ...... position = [" + position + "]");
                 /**
                  * 这里注意要加判断是否为NULL.
                  * 因为在重新加载数据以后会出问题.
@@ -353,6 +359,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         GV2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -365,19 +372,21 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 //                Toast.makeText(getApplicationContext(), "GridView Item " + position + " pos:" + mSavePos, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), YouTubePlayerActivity.class);
                 i.putExtra("key",Config.updateToday.get(position).entityId);
+                i.putExtra("name",Config.updateToday.get(position).entityTytle);
                 startActivity(i);
             }
         });
     }
 
     // 延时请求初始位置的item.
-    Handler mFirstHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            GV2.setDefualtSelect(0);
-            GV3.setDefualtSelect(0);
-        }
-    };
+//    Handler mFirstHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+////            System.out.println("Handler MSG called ..........");
+//            GV2.setDefualtSelect(0);
+//            GV3.setDefualtSelect(0);
+//        }
+//    };
 
 //    // 更新数据后还原焦点框.
 //    Handler mFindhandler = new Handler() {
@@ -417,7 +426,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
     }
 
     private void updateGridViewAdapter3() {
-        mAdapter3 = new GridViewAdapter(view3.getContext(), data3,"3");
+        mAdapter3 = new GridViewAdapter(view3.getContext(), data3 , "3");
         GV3.setAdapter(mAdapter3);
         mAdapter3.notifyDataSetChanged();
     }
@@ -445,10 +454,10 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                         if(postion == 0){
                             initView1();
                         }
-                        if(postion == 1){
+                        if(postion == 1 && !view2Inited){
                             initView2();
                         }
-                        if(postion == 2){
+                        if(postion == 2 && !view3Inited){
                             initView3();
                         }
                         view.setTextColor(res.getColor(android.R.color.white));
@@ -530,11 +539,15 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         }
 
     }
+
     class GridViewAdapter extends BaseAdapter {
 
         private List<String> mDatas;
         private final LayoutInflater mInflater;
         private String thisStep;
+
+        private int POS0 = 1;
+
         public GridViewAdapter(Context context, List<String> data, String step) {
             thisStep = step;
             mDatas = data;
@@ -543,59 +556,68 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
         @Override
         public int getCount() {
+
             return mDatas.size();
         }
 
         @Override
         public Object getItem(int position) {
+//            System.out.println("getItem Method Called .......... position is : " + position);
             return data2.get(position);
         }
 
         @Override
         public long getItemId(int position) {
+//            System.out.println("getItemId Method Called ..........Position is : " + position);
             return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+//            System.out.println("MainView getView Method Called ...... + position = [" + position + "]");
             GridViewAdapter.ViewHolder viewHolder = null;
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_gridview, parent, false);
-                convertView.setTag(new GridViewAdapter.ViewHolder(convertView));
-                ImageView iv = (ImageView)convertView.findViewById(R.id.imgView);
-//                iv.setImageBitmap(PicUtil.getbitmap("http://img.youtube.com/vi/"+playList.get(position)+"/1.jpg"));
-                if("2".equals(thisStep))
-                    LoadImage(iv,Config.updateToday.get(position).entityImg);
-                if("3".equals(thisStep))
-                    LoadImage(iv,Config.playLists.get(position).entityImg);
-//                LoadImage(iv,"http://img.youtube.com/vi/"+Config.UTD_IDS.get(position)+"/0.jpg");
-            }
+//            if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_gridview, parent, false);
+            convertView.setTag(new GridViewAdapter.ViewHolder(convertView));
+//            }
             viewHolder = (GridViewAdapter.ViewHolder) convertView.getTag();
             bindViewData(position, viewHolder);
             return convertView;
         }
 
-        private void LoadImage(ImageView img, String path)
-        {
-            //异步加载图片资源
-            AsyncTaskImageLoad async = new AsyncTaskImageLoad(img);
-            //执行异步加载，并把图片的路径传送过去
-            async.execute(path);
-
+        private void LoadImage(ImageView img, String path){
+            if(img.getDrawable() == null){
+                //异步加载图片资源
+                AsyncTaskImageLoad async = new AsyncTaskImageLoad(img);
+                //执行异步加载，并把图片的路径传送过去
+                async.execute(path);
+            }
         }
 
         private void bindViewData(int position, GridViewAdapter.ViewHolder viewHolder) {
             String title = mDatas.get(position);
+//            System.out.println("Bind View Data ......Position = [" + position + "]， Titie = [" + title + "]");
             viewHolder.titleTv.setText(title);
+            ImageView iv = viewHolder.imageView;
+            if("2".equals(thisStep)){
+                LoadImage(iv,Config.updateToday.get(position).entityImg);
+//                System.out.println("Position = :【" + position + "】，" + Config.playLists.get(position).entityImg + "-----------------" + Config.playLists.get(position).entityId);
+            }
+            if("3".equals(thisStep)){
+                LoadImage(iv,Config.playLists.get(position).entityImg);
+//                System.out.println("Position = :【" + position + "】，" + Config.playLists.get(position).entityImg + "-----------------" + Config.playLists.get(position).entityId);
+            }
         }
 
         class ViewHolder {
             View itemView;
             TextView titleTv;
+            ImageView imageView;
 
             public ViewHolder(View view) {
                 this.itemView = view;
                 this.titleTv = (TextView) view.findViewById(R.id.textView);
+                this.imageView = (ImageView)view.findViewById(R.id.imgView);
             }
         }
     }

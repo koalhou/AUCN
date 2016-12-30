@@ -9,7 +9,7 @@
     android:clipToPadding="false" >
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewUpdateToday"
         android:text="    今日更新列表："
         android:layout_width="match_parent"
         android:layout_height="40dp"

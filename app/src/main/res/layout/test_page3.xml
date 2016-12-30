@@ -8,7 +8,7 @@
     android:clipToPadding="false" >
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewPlayLists"
         android:text="    请选择您要观看的频道："
         android:layout_width="match_parent"
         android:layout_height="40dp"

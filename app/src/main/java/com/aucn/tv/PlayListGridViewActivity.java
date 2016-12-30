@@ -22,8 +22,6 @@ package com.aucn.tv;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -52,8 +50,6 @@ import com.open.androidtvwidget.bridge.EffectNoDrawBridge;
 import com.open.androidtvwidget.view.GridViewTV;
 import com.open.androidtvwidget.view.MainUpView;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -264,6 +260,7 @@ public class PlayListGridViewActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+//            System.out.println("PlayListGridView getView Method Called ...... + position = [" + position + "]");
             ViewHolder viewHolder = null;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_gridview, parent, false);
@@ -299,30 +296,4 @@ public class PlayListGridViewActivity extends Activity {
             }
         }
     }
-    class DownImage extends Thread {
-
-        private ImageView imageView;
-        private  String url;
-
-        public DownImage(ImageView imageView, String url) {
-            this.imageView = imageView;
-            this.url = url;
-        }
-        @Override
-        public void run(){
-            Bitmap bitmap = null;
-            try {
-                //加载一个网络图片
-                InputStream is = new URL(url).openStream();
-                bitmap = BitmapFactory.decodeStream(is);
-//                bitmap = getWebPicture(url);
-                imageView.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-    ///// Adapter 类 end end //////////
-
 }

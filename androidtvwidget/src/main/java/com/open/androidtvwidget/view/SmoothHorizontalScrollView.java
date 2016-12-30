@@ -1,11 +1,11 @@
 package com.open.androidtvwidget.view;
 
-import com.open.androidtvwidget.R;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.HorizontalScrollView;
+
+import com.open.androidtvwidget.R;
 
 /**
  * 当你使用滚动窗口焦点错乱的时候，就可以使用这个控件.
@@ -40,6 +40,7 @@ public class SmoothHorizontalScrollView extends HorizontalScrollView {
 
     @Override
     protected int computeScrollDeltaToGetChildRectOnScreen(Rect rect) {
+
         if (getChildCount() == 0)
             return 0;
 

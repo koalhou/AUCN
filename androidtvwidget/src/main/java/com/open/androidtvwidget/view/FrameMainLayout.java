@@ -39,6 +39,7 @@ public class FrameMainLayout extends FrameLayout {
 
 	@Override
 	public void bringChildToFront(View child) {
+
 		mWidgetTvViewBring.bringChildToFront(this, child);
 	}
 

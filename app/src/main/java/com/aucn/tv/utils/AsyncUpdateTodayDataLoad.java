@@ -36,6 +36,7 @@ public class AsyncUpdateTodayDataLoad extends AsyncTask <String, Integer, String
             e.printStackTrace();
         }
             List<Object> updateTodayitems = (List<Object>) updateTodayOri.get("items");
+        Config.updateToday.clear();
         for(Object o : updateTodayitems){
             try {
                 Map<String, Object> vedioDetails = (Map<String,Object>)o;

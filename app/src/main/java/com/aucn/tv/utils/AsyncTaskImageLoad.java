@@ -23,13 +23,14 @@ public class AsyncTaskImageLoad extends AsyncTask<String, Integer, Bitmap> {
         try {
             //先从本地缓存获取，如果未找到缓存，则从web端获取
             bm = FileUtil.getCachedFile(params[0]);
-            System.out.println("---=============================="+bm);
             if(bm == null){
+                System.out.println("未获取到本地图片，开始从网络获取"+bm);
                 bm = PicUtil.getbitmapAndwrite(params[0]);
             }
         } catch (Exception e){
             e.printStackTrace();
         }
+//        bm = PicUtil.getbitmapAndwrite(params[0]);
         return bm;
     }
 
@@ -38,6 +39,5 @@ public class AsyncTaskImageLoad extends AsyncTask<String, Integer, Bitmap> {
         if(Image!=null && result!=null) {
             Image.setImageBitmap(result);
         }
-        super.onPostExecute(result);
     }
 }
