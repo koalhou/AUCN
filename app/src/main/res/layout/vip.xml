@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/vipImg"
+        android:layout_width="400dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="80dp"
+        android:layout_height="300dp"
+        android:scaleType="fitXY">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/vipTitle"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="450dp"
+        android:textColor="#DD22DD"
+        android:textSize="40dp"
+        android:text="xxcdfjdkfjkddfdfdfkfjsd"
+        android:layout_height="400dp"
+        android:layout_width="1000dp"/>
+
+    <TextView
+        android:id="@+id/vipContent"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="450dp"
+        android:textColor="#2248DD"
+        android:textSize="20dp"
+        android:text="xxcdfjdkfjkddfdfdfdfdfsjfkdsfjldksjfdkslfjdslkfjsd"
+        android:layout_height="400dp"
+        android:layout_width="1000dp"/>
+
+</RelativeLayout>

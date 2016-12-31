@@ -97,7 +97,7 @@ public class AsyncTaskPlayListLoad1 extends AsyncTask <String, Integer, String>{
         }
 
 //        System.out.println("STEP 5 -----------" + sdf.format(new Date()));
-        Config.initFinished = true;
+//        Config.initFinished = true;
         return "OK";
 
 

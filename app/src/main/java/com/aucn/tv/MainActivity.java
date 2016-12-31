@@ -17,10 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,17 +55,19 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
     private View view1, view2, view3,view4;
     private GridViewTV GV2;
     private GridViewTV GV3;
+    private GridViewTV GV4;
 
     private static boolean view2Inited = false;
     private static boolean view3Inited = false;
-
-    private List<String> binded = new ArrayList<>();
+    private static boolean view4Inited = false;
 
     private GridViewAdapter mAdapter2;
     private GridViewAdapter mAdapter3;
+    private GridViewAdapter mAdapter4;
 
     private List<String> data2;
     private List<String> data3;
+    private List<String> data4;
 
     ViewPager viewpager;
     OpenTabHost mOpenTabHost;
@@ -76,6 +77,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
     EffectNoDrawBridge mEffectNoDrawBridge;
     View mNewFocus;
     View mOldView;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -167,7 +169,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
             @Override
             public void onGlobalFocusChanged(View oldFocus, View newFocus) {
                 // 你也可以让标题栏放大，有移动边框.
-                if (newFocus != null && !(newFocus instanceof TextViewWithTTF)) {
+                if ((newFocus != null && (newFocus instanceof GridView)) ||(newFocus != null && newFocus instanceof ReflectItemView)){
                     mEffectNoDrawBridge.setVisibleWidget(false);
                     mainUpView1.setFocusView(newFocus, mOldView, 1.1f);
                     mOldView = newFocus;
@@ -180,11 +182,10 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                     mOldView = null;
                     mainUpView1.setUnFocusView(oldFocus);
                     mEffectNoDrawBridge.setVisibleWidget(true);
-                    initView2();
                 }
             }
         });
-
+//
 
 
         viewpager.setOffscreenPageLimit(4);
@@ -203,7 +204,9 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                if(null != mOldView){
+                    mainUpView1.setUnFocusView(mOldView);
+                }
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE: // viewpager 滚动结束.
                         mainUpView1.setFocusView(mNewFocus, mOldView, 1.1f);
@@ -241,24 +244,54 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
     }
 
     private void initView4() {
-        WebView webView1 = (WebView) view4.findViewById(R.id.webViewVip);
-        webView1.getSettings().setJavaScriptEnabled(true);
-        webView1.setWebViewClient(new WebViewClient(){
+
+        GV4 = (GridViewTV) view4.findViewById(R.id.gridView4);
+        getData4(Config.vips.size());
+        updateGridViewAdapter4();
+        GV4.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        //
+        GV4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                /**
+                 * 这里注意要加判断是否为NULL.
+                 * 因为在重新加载数据以后会出问题.
+                 */
+                if (view != null) {
+                    mainUpView1.setFocusView(view, mOldView, 1.1f);
+                }
+                mOldView = view;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        webView1.loadUrl(Config.MEMBERSHIP);
+        GV4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(), "GridView Item " + position + " pos:" + mSavePos, Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getApplicationContext(), VActivity.class);
+                i.putExtra("title",Config.vips.get(position).entityId);
+                i.putExtra("content",Config.vips.get(position).entityTytle);
+                i.putExtra("img",Config.vips.get(position).entityImg);
+                startActivity(i);
+            }
+        });
     }
 
     private void initView1() {
-
+        ImageView imageView = (ImageView)view1.findViewById(R.id.waitingImg);
+        ImageView imageView1 = (ImageView)view1.findViewById(R.id.waitingImg1);
+        ImageView imageView2 = (ImageView)view1.findViewById(R.id.waitingImg2);
+        ImageView imageView3 = (ImageView)view1.findViewById(R.id.waitingImg3);
+        ImageView imageView4 = (ImageView)view1.findViewById(R.id.waitingImg4);
         final String live = Config.liveId;
         if(live== null || "".equals(live)){
-            ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
-            WebView webView1 = (WebView) view1.findViewById(R.id.webViewLive);
+//        if(live!= null && !"".equals(live)){
+/*            WebView webView1 = (WebView) view1.findViewById(R.id.webViewLive);
             iv.setVisibility(View.GONE);
             webView1.setVisibility(View.VISIBLE);
             webView1.getSettings().setJavaScriptEnabled(true);
@@ -269,12 +302,32 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                     return true;
                 }
             });
-            webView1.loadUrl(Config.LIVE_COMMING_URL);
+            webView1.loadUrl(Config.LIVE_COMMING_URL);*/
+            int index = (int)(1+Math.random()*5);
+
+            ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
+            iv.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+            imageView1.setVisibility(View.GONE);
+            imageView2.setVisibility(View.GONE);
+            imageView3.setVisibility(View.GONE);
+            imageView4.setVisibility(View.GONE);
+            ImageView[] imgs = {imageView,imageView1,imageView2,imageView3,imageView4};
+            imgs[index-1].setVisibility(View.VISIBLE);
+            TextView tvPre = (TextView) view1.findViewById(R.id.livePreText);
+            tvPre.setText(Config.buildPreText());
+            TextView ttvv = (TextView)view1.findViewById(R.id.textView1221);
+            ttvv.setVisibility(View.GONE);
         }else{
             ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
-            WebView webView1 = (WebView) view1.findViewById(R.id.webViewLive);
+            imageView.setVisibility(View.GONE);
+            imageView1.setVisibility(View.GONE);
+            imageView2.setVisibility(View.GONE);
+            imageView3.setVisibility(View.GONE);
+            imageView4.setVisibility(View.GONE);
             iv.setVisibility(View.VISIBLE);
-            webView1.setVisibility(View.GONE);
+            TextView ttvv = (TextView)view1.findViewById(R.id.textView1221);
+            ttvv.setVisibility(View.VISIBLE);
             iv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
@@ -318,11 +371,13 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         GV3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("ON Item Selectd called ...... position = [" + position + "]");
 //                mFindhandler.removeCallbacksAndMessages(null);
 //                mSavePos = position; // 保存原来的位置(不要按照我的抄，只是DEMO)
 //                initGridViewData(new Random().nextInt(3));
@@ -359,8 +414,10 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                System.out.println("");
             }
+
+
         });
         GV2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -419,6 +476,15 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         return data3;
     }
 
+    public List<String> getData4(int count) {
+        data4 = new ArrayList<String>();
+        List<DisplayBase> dbList = Config.vips;
+
+        for (int i = 0; i < count; i++) {
+            data4.add(dbList.get(i).entityTytle);
+        }
+        return data4;
+    }
     private void updateGridViewAdapter2() {
         mAdapter2 = new GridViewAdapter(view2.getContext(), data2,"2");
         GV2.setAdapter(mAdapter2);
@@ -429,6 +495,12 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         mAdapter3 = new GridViewAdapter(view3.getContext(), data3 , "3");
         GV3.setAdapter(mAdapter3);
         mAdapter3.notifyDataSetChanged();
+    }
+
+    private void updateGridViewAdapter4() {
+        mAdapter4 = new GridViewAdapter(view4.getContext(), data4 , "4");
+        GV4.setAdapter(mAdapter4);
+        mAdapter4.notifyDataSetChanged();
     }
 
     @Override
@@ -454,11 +526,14 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                         if(postion == 0){
                             initView1();
                         }
-                        if(postion == 1 && !view2Inited){
+                        if(postion == 1 && data2.size() <= 0){
                             initView2();
                         }
-                        if(postion == 2 && !view3Inited){
+                        if(postion == 2 && data3.size() <= 0){
                             initView3();
+                        }
+                        if(postion == 3 && data4.size() <= 0){
+                            initView4();
                         }
                         view.setTextColor(res.getColor(android.R.color.white));
                         view.setTypeface(null, Typeface.BOLD);
@@ -585,15 +660,6 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
             return convertView;
         }
 
-        private void LoadImage(ImageView img, String path){
-            if(img.getDrawable() == null){
-                //异步加载图片资源
-                AsyncTaskImageLoad async = new AsyncTaskImageLoad(img);
-                //执行异步加载，并把图片的路径传送过去
-                async.execute(path);
-            }
-        }
-
         private void bindViewData(int position, GridViewAdapter.ViewHolder viewHolder) {
             String title = mDatas.get(position);
 //            System.out.println("Bind View Data ......Position = [" + position + "]， Titie = [" + title + "]");
@@ -605,6 +671,10 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
             }
             if("3".equals(thisStep)){
                 LoadImage(iv,Config.playLists.get(position).entityImg);
+//                System.out.println("Position = :【" + position + "】，" + Config.playLists.get(position).entityImg + "-----------------" + Config.playLists.get(position).entityId);
+            }
+            if("4".equals(thisStep)){
+                LoadImage(iv,Config.vips.get(position).entityImg);
 //                System.out.println("Position = :【" + position + "】，" + Config.playLists.get(position).entityImg + "-----------------" + Config.playLists.get(position).entityId);
             }
         }
@@ -619,6 +689,14 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                 this.titleTv = (TextView) view.findViewById(R.id.textView);
                 this.imageView = (ImageView)view.findViewById(R.id.imgView);
             }
+        }
+    }
+    private void LoadImage(ImageView img, String path){
+        if(img.getDrawable() == null){
+            //异步加载图片资源
+            AsyncTaskImageLoad async = new AsyncTaskImageLoad(img);
+            //执行异步加载，并把图片的路径传送过去
+            async.execute(path);
         }
     }
 }

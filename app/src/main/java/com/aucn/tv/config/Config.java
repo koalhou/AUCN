@@ -49,6 +49,8 @@ public class Config {
 
     public static boolean isNetworkOK = false;
     public static Map<String, List<DisplayBase>> PL_DETAILS = new HashMap<String,List<DisplayBase>>();
+    public static List<DisplayBase> livePre = new ArrayList<DisplayBase>();
+    public static List<DisplayBase> vips = new ArrayList<DisplayBase>();
 
     public static String liveId = "";
 
@@ -125,5 +127,23 @@ public class Config {
         initPlayListDatas();
         startLiveSchedule();
         initUpdateTodaySchedule();
+    }
+
+    public static String buildPreText() {
+        String result = "";
+        if(initFinished){
+            result = "暂无直播安排，请稍后重试。。。";
+        }else{
+            result = "系统加载中，请稍后。。。";
+        }
+
+        if(livePre.size()>0){
+            result = "接下来为您安排的直播为：\r\n\r\n" ;
+            for(DisplayBase db : livePre){
+                result += db.entityTytle + ":" + db.entityId + "\r\n";
+            }
+        }
+
+        return result;
     }
 }

@@ -7,6 +7,7 @@
     android:background="@color/transparent"
     android:clipChildren="false"
     android:clipToPadding="false" >
+<!--
 
     <WebView
         android:id="@+id/webViewLive"
@@ -15,6 +16,64 @@
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+-->
+    <ImageView
+        android:id="@+id/waitingImg"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@mipmap/waiting" />
+    <ImageView
+        android:id="@+id/waitingImg1"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@mipmap/waiting1" />
+    <ImageView
+        android:id="@+id/waitingImg2"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@mipmap/waiting2" />
+    <ImageView
+        android:id="@+id/waitingImg3"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@mipmap/waiting3" />
+    <ImageView
+        android:id="@+id/waitingImg4"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@mipmap/waiting4" />
+
+    <TextView
+        android:id="@+id/livePreText"
+        android:layout_marginTop="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="top|center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#FF00FF"
+        android:textSize="24sp"
+        android:text="请稍候。。。"/>
 
     <com.open.androidtvwidget.view.ReflectItemView
         android:id="@+id/to_play"
@@ -38,17 +97,17 @@
                 android:layout_gravity="bottom"
                 android:scaleType="fitXY"
                 android:src="@mipmap/to_play" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="精彩直播，立即开始！"
-                android:layout_gravity="bottom|center"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="30sp"/>
         </FrameLayout>
     </com.open.androidtvwidget.view.ReflectItemView>
-
+    <TextView
+        android:id="@+id/textView1221"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="500dp"
+        android:layout_gravity="bottom|center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#FF3300"
+        android:text="精彩直播，马上开始！"
+        android:textSize="30sp" />
 </RelativeLayout>
