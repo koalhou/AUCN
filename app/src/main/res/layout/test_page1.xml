@@ -16,7 +16,7 @@
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
--->
+
     <ImageView
         android:id="@+id/waitingImg"
         android:layout_centerInParent="true"
@@ -61,18 +61,45 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:scaleType="fitXY"
-        android:src="@mipmap/waiting4" />
+        android:src="@mipmap/waiting4" />-->
+
+    <TextView
+        android:id="@+id/textLivePre"
+        android:text="    直播预告："
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="bottom|center"
+        android:gravity="left"
+        android:textColor="#66CCFF"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/textLiveLiving"
+        android:text="    观看直播："
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="bottom|center"
+        android:gravity="left"
+        android:textColor="#66CCFF"
+        android:textSize="20sp" />
+
+    <View  android:layout_height="4px"
+        android:layout_width="match_parent"
+        android:background="#66CCFF"
+        android:layout_marginTop="55dp" />
 
     <TextView
         android:id="@+id/livePreText"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="60dp"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="top|center"
-        android:gravity="center"
+        android:layout_height="400dp"
+        android:layout_gravity="top|left"
+        android:gravity="left"
         android:textAlignment="center"
-        android:textColor="#FF00FF"
-        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
         android:text="请稍候。。。"/>
 
     <com.open.androidtvwidget.view.ReflectItemView
@@ -99,7 +126,7 @@
                 android:src="@mipmap/to_play" />
         </FrameLayout>
     </com.open.androidtvwidget.view.ReflectItemView>
-    <TextView
+    <!--<TextView
         android:id="@+id/textView1221"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -109,5 +136,5 @@
         android:textAlignment="center"
         android:textColor="#FF3300"
         android:text="精彩直播，马上开始！"
-        android:textSize="30sp" />
+        android:textSize="30sp" />-->
 </RelativeLayout>

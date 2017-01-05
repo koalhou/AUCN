@@ -23,7 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,7 +68,7 @@ public class PlayListGridViewActivity extends Activity {
 //    private int mCount = 50;
 
 //    public static final String PlayList_ID = "AIzaSyAP1H0PtjMyfu1FZZs10-TEklKgesvEpQw";
-
+    EffectNoDrawBridge mEffectNoDrawBridge;
 
     private static List<DisplayBase> playList= new ArrayList<DisplayBase>();
 //    private static List<String[]> playList1= new ArrayList<String[]>();
@@ -80,7 +80,9 @@ public class PlayListGridViewActivity extends Activity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-
+    private float getDimension(int id) {
+        return getResources().getDimension(id);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,15 +95,13 @@ public class PlayListGridViewActivity extends Activity {
         TextView tv = (TextView)findViewById(R.id.list_title);
         tv.setText(playListTitle);
         gridView = (GridViewTV) findViewById(R.id.gridView);
+        float density = getResources().getDisplayMetrics().density;
         mainUpView1 = (MainUpView) findViewById(R.id.mainUpViewGrid);
-        // 建议使用 NoDraw.
-        mainUpView1.setEffectBridge(new EffectNoDrawBridge());
-        EffectNoDrawBridge bridget = (EffectNoDrawBridge) mainUpView1.getEffectBridge();
-        bridget.setTranDurAnimTime(200);
-        // 设置移动边框的图片.
-        mainUpView1.setUpRectResource(R.drawable.white_light_10);
-        // 移动方框缩小的距离.
-        mainUpView1.setDrawUpRectPadding(new Rect(10, 10, 10, -55));
+        mEffectNoDrawBridge = new EffectNoDrawBridge();
+        mainUpView1.setEffectBridge(mEffectNoDrawBridge);
+        mEffectNoDrawBridge.setUpRectResource(R.drawable.white_light_10); // 设置移动边框图片.
+        RectF rectF = new RectF(getDimension(R.dimen.w_16) * density, getDimension(R.dimen.h_16) * density, getDimension(R.dimen.w_16) * density, getDimension(R.dimen.h_16) * density);
+        mEffectNoDrawBridge.setDrawUpRectPadding(rectF);
         // 加载数据.
         getData(playList.size());
         //

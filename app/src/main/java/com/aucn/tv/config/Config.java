@@ -138,9 +138,10 @@ public class Config {
         }
 
         if(livePre.size()>0){
-            result = "接下来为您安排的直播为：\r\n\r\n" ;
+            //result = "接下来为您安排的直播为：\r\n\r\n" ;
+            result = "\r\n\r\n" ;
             for(DisplayBase db : livePre){
-                result += db.entityTytle + ":" + db.entityId + "\r\n";
+                result += db.entityTytle + " :\r\n                  " + db.entityId + "\r\n\r\n";
             }
         }
 

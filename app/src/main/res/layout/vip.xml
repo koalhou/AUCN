@@ -17,9 +17,8 @@
         android:id="@+id/vipTitle"
         android:layout_marginTop="80dp"
         android:layout_marginLeft="450dp"
-        android:textColor="#DD22DD"
+        android:textColor="#000000"
         android:textSize="40dp"
-        android:text="xxcdfjdkfjkddfdfdfkfjsd"
         android:layout_height="400dp"
         android:layout_width="1000dp"/>
 
@@ -29,7 +28,6 @@
         android:layout_marginLeft="450dp"
         android:textColor="#2248DD"
         android:textSize="20dp"
-        android:text="xxcdfjdkfjkddfdfdfdfdfsjfkdsfjldksjfdkslfjdslkfjsd"
         android:layout_height="400dp"
         android:layout_width="1000dp"/>
 

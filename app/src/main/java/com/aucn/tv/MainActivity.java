@@ -253,7 +253,6 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         GV4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 /**
                  * 这里注意要加判断是否为NULL.
                  * 因为在重新加载数据以后会出问题.
@@ -263,7 +262,6 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
                 }
                 mOldView = view;
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -283,11 +281,11 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
     }
 
     private void initView1() {
-        ImageView imageView = (ImageView)view1.findViewById(R.id.waitingImg);
-        ImageView imageView1 = (ImageView)view1.findViewById(R.id.waitingImg1);
-        ImageView imageView2 = (ImageView)view1.findViewById(R.id.waitingImg2);
-        ImageView imageView3 = (ImageView)view1.findViewById(R.id.waitingImg3);
-        ImageView imageView4 = (ImageView)view1.findViewById(R.id.waitingImg4);
+//        ImageView imageView = (ImageView)view1.findViewById(R.id.waitingImg);
+//        ImageView imageView1 = (ImageView)view1.findViewById(R.id.waitingImg1);
+//        ImageView imageView2 = (ImageView)view1.findViewById(R.id.waitingImg2);
+//        ImageView imageView3 = (ImageView)view1.findViewById(R.id.waitingImg3);
+//        ImageView imageView4 = (ImageView)view1.findViewById(R.id.waitingImg4);
         final String live = Config.liveId;
         if(live== null || "".equals(live)){
 //        if(live!= null && !"".equals(live)){
@@ -307,27 +305,31 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
 
             ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
             iv.setVisibility(View.GONE);
-            imageView.setVisibility(View.GONE);
-            imageView1.setVisibility(View.GONE);
-            imageView2.setVisibility(View.GONE);
-            imageView3.setVisibility(View.GONE);
-            imageView4.setVisibility(View.GONE);
-            ImageView[] imgs = {imageView,imageView1,imageView2,imageView3,imageView4};
-            imgs[index-1].setVisibility(View.VISIBLE);
+//            imageView.setVisibility(View.GONE);
+//            imageView1.setVisibility(View.GONE);
+//            imageView2.setVisibility(View.GONE);
+//            imageView3.setVisibility(View.GONE);
+//            imageView4.setVisibility(View.GONE);
+//            ImageView[] imgs = {imageView,imageView1,imageView2,imageView3,imageView4};
+//            imgs[index-1].setVisibility(View.VISIBLE);
             TextView tvPre = (TextView) view1.findViewById(R.id.livePreText);
             tvPre.setText(Config.buildPreText());
-            TextView ttvv = (TextView)view1.findViewById(R.id.textView1221);
-            ttvv.setVisibility(View.GONE);
+            TextView living = (TextView)view1.findViewById(R.id.textLiveLiving);
+            living.setVisibility(View.GONE);
+            TextView pre = (TextView)view1.findViewById(R.id.textLivePre);
+            pre.setVisibility(View.VISIBLE);
         }else{
             ReflectItemView iv = (ReflectItemView)view1.findViewById(R.id.to_play);
-            imageView.setVisibility(View.GONE);
-            imageView1.setVisibility(View.GONE);
-            imageView2.setVisibility(View.GONE);
-            imageView3.setVisibility(View.GONE);
-            imageView4.setVisibility(View.GONE);
+//            imageView.setVisibility(View.GONE);
+//            imageView1.setVisibility(View.GONE);
+//            imageView2.setVisibility(View.GONE);
+//            imageView3.setVisibility(View.GONE);
+//            imageView4.setVisibility(View.GONE);
             iv.setVisibility(View.VISIBLE);
-            TextView ttvv = (TextView)view1.findViewById(R.id.textView1221);
-            ttvv.setVisibility(View.VISIBLE);
+            TextView living = (TextView)view1.findViewById(R.id.textLiveLiving);
+            living.setVisibility(View.VISIBLE);
+            TextView pre = (TextView)view1.findViewById(R.id.textLivePre);
+            pre.setVisibility(View.GONE);
             iv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
@@ -481,7 +483,7 @@ public class MainActivity extends Activity  implements OpenTabHost.OnTabSelectLi
         List<DisplayBase> dbList = Config.vips;
 
         for (int i = 0; i < count; i++) {
-            data4.add(dbList.get(i).entityTytle);
+            data4.add(dbList.get(i).entityTytle.replace(".jpg",""));
         }
         return data4;
     }

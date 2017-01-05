@@ -28,7 +28,7 @@
         android:id="@+id/test_hscro_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:fillViewport="true"
         android:scrollbars="none" >
 
@@ -54,6 +54,7 @@
         android:numColumns="auto_fit"
         android:scrollbars="none"
         android:verticalSpacing="20dp" />
+
     </com.open.androidtvwidget.view.FrameMainLayout>
     </com.open.androidtvwidget.view.SmoothHorizontalScrollView>
 </RelativeLayout>

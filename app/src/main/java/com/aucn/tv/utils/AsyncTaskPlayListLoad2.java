@@ -1,7 +1,6 @@
 package com.aucn.tv.utils;
 
 import android.os.AsyncTask;
-import android.util.Base64;
 
 import com.aucn.tv.config.Config;
 import com.aucn.tv.config.DB;
@@ -24,7 +23,7 @@ public class AsyncTaskPlayListLoad2 extends AsyncTask <String, Integer, String>{
         Gson gson=new Gson();
         try {
             playListStr = hu.get(query, "UTF-8");
-            playListStr = new String(Base64.decode(playListStr.getBytes(),0));
+//            playListStr = new String(Base64.decode(playListStr.getBytes(),0));
             db = gson.fromJson(playListStr,DB.class);
             Config.playLists.addAll(db.pls);
             Config.PL_DETAILS.putAll(db.plDtls);

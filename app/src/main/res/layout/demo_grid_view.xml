@@ -41,7 +41,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="50dp"
                 android:layout_marginBottom="100dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="60dp"
                 android:clipChildren="false"
                 android:columnWidth="300dp"
                 android:gravity="center_vertical"
